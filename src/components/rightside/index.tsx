@@ -2,7 +2,7 @@ import { useState } from 'react'
 import eagleImg from '../../assets/images/eagle.png'
 import { cards } from '../../list'
 import * as C from './style'
-import './style.css'
+
 
 
 type Props = {

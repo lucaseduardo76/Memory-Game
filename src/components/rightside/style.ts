@@ -14,8 +14,6 @@ export const Card = styled.div<CardType>`
     border-radius: 10px;
     box-shadow:  5px 5px 15px;
     cursor: pointer;
-    transition: all 2s;
-
     &:hover{
         background-color: rgb(222, 223, 255);
     }

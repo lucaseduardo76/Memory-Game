@@ -64,9 +64,11 @@ export const restartButton = styled.button`
     overflow: hidden;  
     cursor: pointer;
     transition: all .5s;
+    display: flex;
+    justify-content: center;
     
     &:hover{ 
-        background-color: rgb(28, 74, 180);
+        background-color: rgb(28, 74, 18 0);
     }
 `
 

@@ -8,96 +8,132 @@ import { useEffect, useState } from 'react'
 
 
 function App() {
-  const [FinalCards, setCards] = useState(engine())
-  const [firstCard, setFirstCard] = useState(13)
-  const [secondCard, setSecondCard] = useState(13)
-  const [verify, setVerify] = useState(true)
-  const [movement, setMovement] = useState(0)
+  const [FinalCards, setCards] = useState(engine());
+  const [firstCard, setFirstCard] = useState(13);
+  const [secondCard, setSecondCard] = useState(13);
+  const [verify, setVerify] = useState(true);
+  const [movement, setMovement] = useState(0);
+  const [countTimer, setCountTimer] = useState(0);
+  const [minute, setMinutes] = useState(0);
+  const [clock, setClock] = useState('00:00');
 
+  let timer: any;
 
+  const formatHour = (num: number) => num >= 0 && num < 10 ? `0${num}` : `${num}`;
 
+  useEffect(() => {
 
+    timer = setInterval(() => {
+      setCountTimer(countTimer + 1);
+      if (countTimer >= 59) {
+        setCountTimer(0);
+        setMinutes(minute + 1);
+      };
 
+      let PutHourTogether = `${formatHour(minute)}:${formatHour(countTimer)}`;
+      setClock(PutHourTogether)
+
+    }, 1000)
+    return () => clearInterval(timer);
+  }, [countTimer])
 
   const retId = (handleId: number): void => {
 
     if (verify == true) {
-      setFirstCard(handleId)
-      setVerify(false)
-
+      setFirstCard(handleId);
+      setVerify(false);
     } else {
-      setSecondCard(handleId)
-      setVerify(true)
+      setSecondCard(handleId);
+      setVerify(true);
     }
 
-    TurnCard(handleId)
-    CheckCards()
+    TurnCard(handleId);
+    CheckCards();
 
 
   }
-
-  const TurnCard = (Position: number) => {
-    const FinalCardsSup = FinalCards
-
-    if (!FinalCardsSup[Position].active) {
-      FinalCardsSup[Position].active = true
-    }
-    setCards(FinalCardsSup)
-  }
-
-  const CheckCards = () => {
-    if (FinalCards[firstCard] && FinalCards[secondCard]) {
-      if (firstCard != secondCard) {
-        if (FinalCards[firstCard].id == FinalCards[secondCard].id) {
-          const FinalCardsSup = FinalCards
-          FinalCardsSup[firstCard].alwaysActive = true
-          FinalCardsSup[secondCard].alwaysActive = true
-          setMovement(movement + 1)
-
-        } else {
-          const FinalCardsSup = FinalCards
-          FinalCardsSup[firstCard].active = false
-          FinalCardsSup[secondCard].active = false
-          setMovement(movement + 1)
-
-        }
-      }else{
-        const FinalCardsSup = FinalCards
-        FinalCardsSup[firstCard].active = false
-        FinalCardsSup[secondCard].active = false
-
-      }
-    }
-
-
-  }
-
-  const Restart = ()=>{
-    setCards([])
-    setFirstCard(13)
-    setSecondCard(13)
-    setVerify(true)
-    setMovement(0)
-    const FinalCardsSup = FinalCards
-    for(let n in FinalCards){      
-      FinalCardsSup[n].active = false
-      FinalCardsSup[n].alwaysActive = false
-    }
-    setCards(FinalCardsSup)
-    setCards(engine())
-    
-  }
-  
 
   useEffect(() => {
     setTimeout(() => {
-      if (firstCard != 13 && secondCard != 13) {
-        CheckCards()
-        setFirstCard(13)
-        setSecondCard(13)
-      }
-    }, 500)
-  }, [retId])
+      
+        if (firstCard != 13 && secondCard != 13) {
+          CheckCards();
+          setFirstCard(13);
+          setSecondCard(13);
+        }
+           
+    }, 500);
+  }, [retId]);
+
+  const TurnCard = (Position: number) => {
+    const FinalCardsSup = FinalCards;
+
+    if (!FinalCardsSup[Position].active) {
+      FinalCardsSup[Position].active = true;
+    }
+    setCards(FinalCardsSup);
+  }
+
+ 
+
+  const CheckCards = () => {
+    if (FinalCards[firstCard] && FinalCards[secondCard]) {
+
+      if (firstCard != secondCard) {
+
+        if (FinalCards[firstCard].id == FinalCards[secondCard].id) {
+          const FinalCardsSup = FinalCards;
+          FinalCardsSup[firstCard].alwaysActive = true;
+          FinalCardsSup[secondCard].alwaysActive = true;
+
+          let stopTimerWhenWin = true;
+
+          for (let n in FinalCardsSup) {
+            if (FinalCardsSup[n].alwaysActive == false) {
+              stopTimerWhenWin = false;
+            }
+          }
+
+          if (stopTimerWhenWin) {
+            clearInterval(timer);
+          }
+
+          setMovement(movement + 1);
+        } else {
+          const FinalCardsSup = FinalCards;
+          FinalCardsSup[firstCard].active = false;
+          FinalCardsSup[secondCard].active = false;
+          setMovement(movement + 1);
+
+        }
+
+      } else {
+        const FinalCardsSup = FinalCards;
+        FinalCardsSup[firstCard].active = false;
+        FinalCardsSup[secondCard].active = false;
+
+      };
+    };
+  };
+
+  const Restart = () => {
+    setCards([]);
+    setFirstCard(13);
+    setSecondCard(13);
+    setVerify(true);
+    setMovement(0);
+    const FinalCardsSup = FinalCards;
+    for (let n in FinalCards) {
+      FinalCardsSup[n].active = false;
+      FinalCardsSup[n].alwaysActive = false;
+    }
+    setCards(FinalCardsSup);
+    setCards(engine());
+
+    setCountTimer(0);
+    setMinutes(0);
+    setClock('00:00');
+  }
 
 
 
@@ -109,6 +145,7 @@ function App() {
             Movement={movement}
             ValidationTimer={FinalCards}
             restart={Restart}
+            clockScreen={clock}
           />
         </div>
 
@@ -121,7 +158,8 @@ function App() {
               retIdComp={retId}
               indice={item.position}
               array={FinalCards}
-              parDone={item.alwaysActive} />
+              parDone={item.alwaysActive}
+            />
           ))}
 
         </C.Container>

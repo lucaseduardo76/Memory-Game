@@ -1,21 +1,28 @@
-import { useState } from "react"
-
-export const Contador = () =>{
-    const [timer, setTimer] = useState('')
-    let s = 0
-    let m = 0
-    setInterval(() => {
-        s += 1
-        if(s > 59){
-            s = 0
-            m += 1
-        }
-        let hour = `0${m}:${s}`
-        console.log(hour)
-        setTimer(hour)
+import { useState, useEffect } from "react"
 
 
-    }, 1000)
+export const Clock = ()=>{
+    const [countTimer, setCountTimer] = useState(0)
+    const [minute, setMinutes] = useState(0)
+    const  [clock, setClock] = useState('00:00')
+    useEffect(()=>{
+        const timer = setInterval(()=>{
+            setCountTimer(countTimer + 1);            
+            if(countTimer >= 59){                
+                setCountTimer(0)
+                setMinutes(minute + 1)                
+            }
 
-    return timer
+            
+            let PutHourTogether = `${formatHour(minute)}:${formatHour(countTimer)}`
+
+            setClock(PutHourTogether)
+
+        }, 1000)
+    return () => clearInterval(timer);
+    }, [countTimer])
+    
+    const formatHour = (num: number) => num >=0 && num < 10 ? `0${num}` : `${num}`
+
+    return clock
 }
