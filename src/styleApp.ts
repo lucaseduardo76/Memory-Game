@@ -4,9 +4,12 @@ export const mainContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 80px;
-    flex-direction: column;
+    gap: 80px;    
     margin-top: 8%;
+
+    @media(max-width: 750px){
+        flex-direction: column;
+    }
 `
 
 export const Container = styled.div`

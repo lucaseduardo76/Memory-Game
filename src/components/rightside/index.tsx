@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import eagleImg from '../../assets/images/eagle.png'
+import { cards } from '../../list'
 import * as C from './style'
 import './style.css'
 
@@ -10,6 +11,7 @@ type Props = {
     active: boolean;
     retIdComp: (txt: number) => void;
     array: any
+    parDone: boolean
 
 }
 export const Right = (data: Props) => {
@@ -17,26 +19,24 @@ export const Right = (data: Props) => {
     const bgColorActive: string = "rgb(56, 150, 116)"
     const [validation, setValidation] = useState<boolean>(data.active)
 
-    const Color: string = validation ? bgColorActive : bgColor;
-    const photo: string = validation ? data.photo : eagleImg;
+    const Color: string = validation || data.parDone? bgColorActive : bgColor;
+    const photo: string = validation || data.parDone ? data.photo : eagleImg;
 
     const handleClick = () => {
-        if (validation == true) {
-            setValidation(false)
-        } else {
-            setValidation(true)
-        }
+
         let positionArray: number[] = []
-        
-        for(let n in data.array){
+
+        for (let n in data.array) {
             positionArray.push(data.array[n].position)
         }
 
         data.retIdComp(positionArray.indexOf(data.indice))
-        console.log(positionArray)
+
+        console.log(cards[positionArray.indexOf(data.indice)].image)
+
     }
 
-    
+
 
     return (
         <div >

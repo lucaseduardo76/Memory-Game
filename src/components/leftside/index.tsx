@@ -1,7 +1,49 @@
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import reset from '../../assets/images/restart.svg'
 import * as C from './style'
-export const Left = () => {
+import {Contador} from './timer'
+
+
+type Props = {
+    ValidationTimer: any
+    Movement: number
+    restart: () => void
+}
+
+
+export const Left = (data: Props) => {
+    const [countTimer, setCountTimer] = useState(0)
+    const [seconds, setSeconds] = useState(0)
+    const [minute, setMinutes] = useState(0)
+    const [windowTimer, setWindowTimer] = useState('')
+    const [abc, setAbc] = useState('')
+    useEffect(()=>{
+        const timer = setInterval(()=>{
+            setCountTimer(countTimer + 1);
+            setAbc(windowTimer)
+        }, 1000)
+    return () => clearInterval(timer);
+    }, [countTimer])
+    
+    const a = (): string =>{
+        setSeconds(countTimer)
+
+        if(seconds > 59){
+            setSeconds(0)
+            setMinutes(minute + 1)
+            setWindowTimer(`0${minute}:${seconds}`)
+        }
+
+        return windowTimer
+    }
+
+    const restartFunction =() =>{
+        data.restart()
+    }
+
+    
+
     return (
         <C.container>
             <C.caixa>
@@ -20,16 +62,16 @@ export const Left = () => {
 
             <div>
                 <C.assetsTitle>Tempo</C.assetsTitle>
-                <C.counter>00:00</C.counter>
+                <C.counter>{abc}</C.counter>
             </div>
 
             <div>
                 <C.assetsTitle>Movimentos</C.assetsTitle>
-                <C.counter>0</C.counter>
+                <C.counter>{data.Movement}</C.counter>
             </div>
 
             <div>
-                <C.restartButton>
+                <C.restartButton onClick={restartFunction}>
                     <C.containerArrow>
                         <C.imgArrow src={reset} alt="" />
                     </C.containerArrow>

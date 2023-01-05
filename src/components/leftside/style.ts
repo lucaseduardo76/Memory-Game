@@ -62,6 +62,12 @@ export const restartButton = styled.button`
     display: flex;
     color: aliceblue;  
     overflow: hidden;  
+    cursor: pointer;
+    transition: all .5s;
+    
+    &:hover{ 
+        background-color: rgb(28, 74, 180);
+    }
 `
 
 export const containerArrow = styled.div`    
