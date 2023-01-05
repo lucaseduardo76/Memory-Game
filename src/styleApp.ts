@@ -19,4 +19,8 @@ export const Container = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    
+     @media(max-width: 750px){
+        grid-template-columns: 100px 100px 100px;
+    }
 `
