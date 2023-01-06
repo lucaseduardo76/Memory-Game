@@ -48,21 +48,20 @@ function App() {
     }
 
     TurnCard(handleId);
-    CheckCards();
-
-
+    
   }
+
+
 
   useEffect(() => {
     setTimeout(() => {
-      
-        if (firstCard != 13 && secondCard != 13) {
-          CheckCards();
+        if (firstCard != 13 && secondCard != 13) {   
+          CheckCards();       
           setFirstCard(13);
           setSecondCard(13);
         }
            
-    }, 500);
+    }, 50);
   }, [retId]);
 
   const TurnCard = (Position: number) => {
@@ -80,9 +79,10 @@ function App() {
     if (FinalCards[firstCard] && FinalCards[secondCard]) {
 
       if (firstCard != secondCard) {
+        const FinalCardsSup = FinalCards;
+        setMovement(movement + 1);
 
-        if (FinalCards[firstCard].id == FinalCards[secondCard].id) {
-          const FinalCardsSup = FinalCards;
+        if (FinalCards[firstCard].id == FinalCards[secondCard].id) {          
           FinalCardsSup[firstCard].alwaysActive = true;
           FinalCardsSup[secondCard].alwaysActive = true;
 
@@ -95,23 +95,15 @@ function App() {
           }
 
           if (stopTimerWhenWin) {
+            console.log(FinalCards)
             clearInterval(timer);
           }
+          
 
-          setMovement(movement + 1);
         } else {
-          const FinalCardsSup = FinalCards;
-          FinalCardsSup[firstCard].active = false;
-          FinalCardsSup[secondCard].active = false;
-          setMovement(movement + 1);
-
-        }
-
-      } else {
-        const FinalCardsSup = FinalCards;
-        FinalCardsSup[firstCard].active = false;
-        FinalCardsSup[secondCard].active = false;
-
+            FinalCardsSup[firstCard].active = false;
+            FinalCardsSup[secondCard].active = false;                
+        };
       };
     };
   };
