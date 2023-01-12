@@ -13,31 +13,41 @@ function App() {
   const [secondCard, setSecondCard] = useState(13);
   const [verify, setVerify] = useState(true);
   const [movement, setMovement] = useState(0);
-  const [countTimer, setCountTimer] = useState(0);
+  const [seconds, setSeconds] = useState(0);
   const [minute, setMinutes] = useState(0);
   const [clock, setClock] = useState('00:00');
 
   let timer: any;
 
-  const formatHour = (num: number) => num >= 0 && num < 10 ? `0${num}` : `${num}`;
-
   useEffect(() => {
-
-    timer = setInterval(() => {
-      setCountTimer(countTimer + 1);
-      if (countTimer >= 59) {
-        setCountTimer(0);
+     timer = setInterval(() => {
+      setSeconds(seconds + 1);
+      if (seconds >= 59) {
+        setSeconds(0);
         setMinutes(minute + 1);
       };
+      const formatHour = (num: number) => num >= 0 && num < 10 ? `0${num}` : `${num}`;
 
-      let PutHourTogether = `${formatHour(minute)}:${formatHour(countTimer)}`;
-      setClock(PutHourTogether)
+      let PutHourTogether = `${formatHour(minute)}:${formatHour(seconds)}`;
+      setClock(PutHourTogether);
 
-    }, 1000)
+    }, 1000)    
     return () => clearInterval(timer);
-  }, [countTimer])
+  }, [seconds])
 
-  const retId = (handleId: number): void => {
+  useEffect(()  => {
+    setTimeout(() => {
+        if (firstCard != 13 && secondCard != 13) {   
+          CheckCards();       
+          setFirstCard(13);
+          setSecondCard(13);
+        }
+           
+    }, 250);
+  }, [retId]);
+
+
+  function retId(handleId: number): void{
 
     if (verify == true) {
       setFirstCard(handleId);
@@ -48,21 +58,11 @@ function App() {
     }
 
     TurnCard(handleId);
-    
+
   }
+  
+  
 
-
-
-  useEffect(() => {
-    setTimeout(() => {
-        if (firstCard != 13 && secondCard != 13) {   
-          CheckCards();       
-          setFirstCard(13);
-          setSecondCard(13);
-        }
-           
-    }, 50);
-  }, [retId]);
 
   const TurnCard = (Position: number) => {
     const FinalCardsSup = FinalCards;
@@ -76,28 +76,38 @@ function App() {
  
 
   const CheckCards = () => {
+    
+    const AllCardsOpen = (SuportArray: any): boolean =>{      
+      let checking = true;
+
+      for (let n in SuportArray) {
+        if (SuportArray[n].alwaysActive == false) {
+          checking = false;
+        };
+      };
+
+      return checking
+
+    }
+
+
+
+
     if (FinalCards[firstCard] && FinalCards[secondCard]) {
 
       if (firstCard != secondCard) {
         const FinalCardsSup = FinalCards;
-        setMovement(movement + 1);
+        if(!AllCardsOpen(FinalCardsSup)){
+          setMovement(movement + 1);
+        }
 
         if (FinalCards[firstCard].id == FinalCards[secondCard].id) {          
           FinalCardsSup[firstCard].alwaysActive = true;
-          FinalCardsSup[secondCard].alwaysActive = true;
+          FinalCardsSup[secondCard].alwaysActive = true;          
 
-          let stopTimerWhenWin = true;
-
-          for (let n in FinalCardsSup) {
-            if (FinalCardsSup[n].alwaysActive == false) {
-              stopTimerWhenWin = false;
-            }
-          }
-
-          if (stopTimerWhenWin) {
-            console.log(FinalCards)
+          if (AllCardsOpen(FinalCardsSup)) {
             clearInterval(timer);
-          }
+          };
           
 
         } else {
@@ -122,7 +132,7 @@ function App() {
     setCards(FinalCardsSup);
     setCards(engine());
 
-    setCountTimer(0);
+    setSeconds(0);
     setMinutes(0);
     setClock('00:00');
   }

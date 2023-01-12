@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import reset from '../../assets/images/restart.svg'
 import * as C from './style'
-import { Clock } from './timer'
 
 
 type Props = {

@@ -31,9 +31,6 @@ export const Right = (data: Props) => {
         }
 
         data.retIdComp(positionArray.indexOf(data.indice))
-
-        console.log(cards[positionArray.indexOf(data.indice)].image)
-
     }
 
 
