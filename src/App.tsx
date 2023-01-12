@@ -43,7 +43,7 @@ function App() {
           setSecondCard(13);
         }
            
-    }, 250);
+    }, 350);
   }, [retId]);
 
 
@@ -89,9 +89,6 @@ function App() {
       return checking
 
     }
-
-
-
 
     if (FinalCards[firstCard] && FinalCards[secondCard]) {
 
