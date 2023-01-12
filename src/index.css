@@ -10,4 +10,5 @@ body{
     justify-content: center;
     height: auto;
     flex-direction: column;
+    margin-bottom: 100px;
 }
